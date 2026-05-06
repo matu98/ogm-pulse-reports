@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShipBob Reddit Pulse — State of the Union | ogm-pulse</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --shell: #2B2824;
+      --paper: #EDE6D4;
+      --paper-soft: #F8F3E6;
+      --paper-deep: #DFD4BA;
+      --green: #59B68E;
+      --green-deep: #2F7A5F;
+      --green-bg: #DCEBDE;
+      --green-bg-soft: #EAF4EC;
+      --ink: #191714;
+      --ink-muted: #655F55;
+      --line: rgba(43, 40, 36, 0.18);
+      --white: #FFFDF8;
+      --red: #B85C4E;
+      --red-bg: #F5E8E5;
+      --yellow: #C7A94E;
+      --shadow: 0 20px 60px rgba(43, 40, 36, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .band {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .band--shell {
+      background: var(--shell);
+      color: var(--white);
+    }
+
+    .band--light {
+      background: var(--paper-soft);
+    }
+
+    .band--green {
+      background: var(--green-bg);
+    }
+
+    .band--green-soft {
+      background: var(--green-bg-soft);
+    }
+
+    .band--warm {
+      background: var(--red-bg);
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 72px 0;
+    }
+
+    .wrap--wide {
+      width: min(1080px, calc(100% - 48px));
+    }
+
+    /* ── Hero ── */
+
+    .hero .wrap {
+      min-height: 72vh;
+      display: grid;
+      align-content: center;
+      padding-bottom: 42px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      font-family: Fraunces, Georgia, serif;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 900px;
+      font-size: clamp(3rem, 7vw, 5.4rem);
+      line-height: 0.92;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      line-height: 1.02;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      line-height: 1.25;
+      font-family: Inter, system-ui, sans-serif;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .hero__subtitle {
+      margin-top: 28px;
+      max-width: 700px;
+      color: rgba(255, 253, 248, 0.78);
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .hero__meta {
+      margin-top: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1px;
+      background: rgba(255, 253, 248, 0.18);
+      border: 1px solid rgba(255, 253, 248, 0.18);
+    }
+
+    .hero__metric {
+      flex: 1 1 160px;
+      min-height: 100px;
+      padding: 22px;
+      background: rgba(255, 253, 248, 0.06);
+    }
+
+    .hero__metric strong {
+      display: block;
+      color: var(--green);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    .hero__metric span {
+      display: block;
+      margin-top: 10px;
+      color: rgba(255, 253, 248, 0.68);
+      font-size: 0.88rem;
+    }
+
+    /* ── Prose ── */
+
+    .prose p {
+      margin-top: 18px;
+      font-size: 1.04rem;
+      line-height: 1.68;
+      color: var(--ink);
+    }
+
+    .prose p:first-child {
+      margin-top: 0;
+    }
+
+    .band--shell .prose p {
+      color: rgba(255, 253, 248, 0.88);
+    }
+
+    .prose strong {
+      font-weight: 700;
+    }
+
+    .section-intro {
+      margin-bottom: 42px;
+    }
+
+    .section-intro h2 {
+      margin-bottom: 22px;
+    }
+
+    /* ── Pull Quotes ── */
+
+    .pullquote {
+      margin: 32px 0;
+      padding: 28px 32px;
+      border-left: 4px solid var(--green);
+      background: var(--paper-soft);
+      font-size: 1.08rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .band--shell .pullquote {
+      background: rgba(255, 253, 248, 0.06);
+      border-left-color: var(--green);
+      color: rgba(255, 253, 248, 0.88);
+    }
+
+    .band--green .pullquote,
+    .band--green-soft .pullquote {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ── Table ── */
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background: var(--shell);
+      color: var(--white);
+    }
+
+    th {
+      padding: 14px 20px;
+      font-weight: 700;
+      text-align: left;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: var(--white);
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--paper-soft);
+    }
+
+    .table-note {
+      margin-top: 18px;
+      color: var(--ink-muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .tone--negative {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .tone--mixed {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    .tone--evaluative {
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    /* ── Bullet lists ── */
+
+    .evidence-list {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .evidence-list li {
+      position: relative;
+      padding: 16px 0 16px 22px;
+      border-bottom: 1px solid var(--line);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .evidence-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .evidence-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 24px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .band--shell .evidence-list li {
+      border-bottom-color: rgba(255, 253, 248, 0.12);
+      color: rgba(255, 253, 248, 0.88);
+    }
+
+    /* ── Strengths list ── */
+
+    .strengths-list {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0;
+    }
+
+    .strengths-list li {
+      position: relative;
+      padding: 20px 0 20px 24px;
+      border-bottom: 1px solid rgba(47, 122, 95, 0.18);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .strengths-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .strengths-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 28px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green-deep);
+    }
+
+    /* ── Recommendations ── */
+
+    .rec-grid {
+      display: grid;
+      gap: 1px;
+      background: rgba(255, 253, 248, 0.18);
+      border: 1px solid rgba(255, 253, 248, 0.18);
+      margin-top: 36px;
+    }
+
+    .rec {
+      padding: 30px;
+      background: rgba(255, 253, 248, 0.06);
+    }
+
+    .rec__number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(89, 182, 142, 0.5);
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .rec h3 {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .rec p {
+      color: rgba(255, 253, 248, 0.76);
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+
+    .footer {
+      background: var(--shell);
+      border-top: 1px solid rgba(255, 253, 248, 0.1);
+      border-bottom: none;
+    }
+
+    .footer .wrap {
+      padding: 36px 0;
+      text-align: center;
+      color: rgba(255, 253, 248, 0.38);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+    }
+
+    .footer-rule {
+      display: block;
+      width: 60px;
+      height: 1px;
+      margin: 0 auto 18px;
+      background: rgba(255, 253, 248, 0.14);
+      border: 0;
+    }
+
+    /* ── Coverage bar ── */
+
+    .coverage {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-muted);
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+
+    .band--shell .coverage {
+      border-top-color: rgba(255, 253, 248, 0.12);
+      color: rgba(255, 253, 248, 0.48);
+    }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 760px) {
+      .wrap, .wrap--wide {
+        width: min(100% - 28px, 920px);
+        padding: 48px 0;
+      }
+
+      .hero .wrap {
+        min-height: 64vh;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 12vw, 3.6rem);
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 8vw, 2.4rem);
+      }
+
+      .hero__meta {
+        flex-direction: column;
+      }
+
+      .pullquote {
+        padding: 20px 22px;
+        font-size: 1rem;
+      }
+
+      th, td {
+        padding: 10px 14px;
+        font-size: 0.88rem;
+      }
+
+      .rec-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rec {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="hero band band--shell">
+      <div class="wrap">
+        <p class="eyebrow">ogm-pulse / trend report</p>
+        <h1>ShipBob Reddit Pulse</h1>
+        <p class="hero__subtitle">State of the Union</p>
+        <p style="margin-top: 22px; max-width: 740px; color: rgba(255,253,248,0.6); font-size: 1.02rem; line-height: 1.6;">Over seven months of Reddit signal (October 2025 through April 2026), ShipBob's online positioning has shifted from occasional complaint target to default name that merchants increasingly evaluate away from.</p>
+        <div class="hero__meta">
+          <div class="hero__metric">
+            <strong>44</strong>
+            <span>Classified threads</span>
+          </div>
+          <div class="hero__metric">
+            <strong>22</strong>
+            <span>Subreddits tracked</span>
+          </div>
+          <div class="hero__metric">
+            <strong>14</strong>
+            <span>Competitors identified</span>
+          </div>
+          <div class="hero__metric">
+            <strong>7</strong>
+            <span>Months of history</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ EXECUTIVE SUMMARY ═══════════════ -->
+    <section class="band band--light">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2>Executive Summary</h2>
+        </div>
+        <div class="prose">
+          <p>Over seven months of Reddit signal (October 2025 through April 2026), ShipBob's online positioning has shifted from occasional complaint target to default name that merchants increasingly evaluate away from. Early months featured isolated horror stories -- a $250,000 overcharge, a rejection for low volume. By spring 2026, the pattern had consolidated: ShipBob appears in nearly every 3PL discussion thread, but as the starting point merchants are trying to move past, not the destination they are moving toward.</p>
+          <p>Simultaneously, a new category threat emerged in the form of China-direct fulfillment, which reframes ShipBob not as expensive or unreliable but as structurally outdated for China-sourcing brands. The most persistent complaint across the full period is not pricing, accuracy, or speed -- it is support and account management.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ BY THE NUMBERS ═══════════════ -->
+    <section class="band">
+      <div class="wrap wrap--wide">
+        <div class="section-intro">
+          <h2>By the Numbers</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Conversations Tracked</th>
+                <th>Tone</th>
+                <th>Key Competitor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Oct 2025</td>
+                <td>2</td>
+                <td><span class="tone--negative">Negative</span> / Neutral</td>
+                <td>ShipHero</td>
+              </tr>
+              <tr>
+                <td>Nov 2025</td>
+                <td>3</td>
+                <td><span class="tone--negative">Negative</span> / <span class="tone--mixed">Mixed</span></td>
+                <td>ShipMonk, Flexport</td>
+              </tr>
+              <tr>
+                <td>Dec 2025</td>
+                <td>4</td>
+                <td><span class="tone--mixed">Mixed</span></td>
+                <td>Red Stag, ShipMonk</td>
+              </tr>
+              <tr>
+                <td>Jan 2026</td>
+                <td>2</td>
+                <td><span class="tone--negative">Negative</span></td>
+                <td>ShipMonk, Deliverr</td>
+              </tr>
+              <tr>
+                <td>Feb 2026</td>
+                <td>1</td>
+                <td><span class="tone--negative">Negative</span> (detailed churn)</td>
+                <td>ShipMonk</td>
+              </tr>
+              <tr>
+                <td>Mar 2026</td>
+                <td>13</td>
+                <td><span class="tone--negative">Negative</span> / <span class="tone--evaluative">Evaluative</span></td>
+                <td>ShipMonk, Flexport, Red Stag</td>
+              </tr>
+              <tr>
+                <td>Apr 2026</td>
+                <td>19</td>
+                <td><span class="tone--evaluative">Evaluative</span> / Dismissive</td>
+                <td>ShipHero, ShipMonk, Red Stag</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note"><strong>Totals:</strong> 44 classified threads across 22 subreddits. 14 distinct competitors tracked. Raw collected volume: 68 threads. Volume tripled between February and March, then grew another 46% into April.</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════ TREND 1 ═══════════════ -->
+    <section class="band band--light">
+      <div class="wrap">
+        <div class="section-intro">
+          <p class="eyebrow">Trend 1</p>
+          <h2>The "Default Name" Problem</h2>
+        </div>
+        <div class="prose">
+          <p>ShipBob is the brand everyone knows. Increasingly, it is also the brand everyone evaluates away from.</p>
+          <p>In <strong>October 2025</strong>, the signal was direct and personal: a merchant reported losing over $250,000 in overcharges and incorrect shipping costs during their time with ShipBob. This is a complaint -- specific, emotional, recoverable through customer outreach.</p>
+          <p>By <strong>November 2025</strong>, the tone shifted to preemptive rejection:</p>
+        </div>
+        <div class="pullquote">"ShipBob declined us as we are too small for them and the reviews are pretty bad anyways."</div>
+        <div class="prose">
+          <p>The brand is now being dismissed before evaluation begins, on the basis of reputation alone.</p>
+          <p><strong>February 2026</strong> produced the most strategically important thread of the entire dataset: a merchant leaving ShipBob after one year who explicitly praised the software, accuracy, and shipping speeds but left purely over support and account management. This is not a disgruntled customer -- it is a satisfied user who churned anyway.</p>
+          <p>By <strong>April 2026</strong>, the pattern completed. A merchant seeking 3PL recommendations asked for:</p>
+        </div>
+        <div class="pullquote">"real recommendations over the generic 'try ShipBob' answers."</div>
+        <div class="prose">
+          <p>ShipBob has become the suggestion people make when they have nothing specific to say -- the 3PL equivalent of "just Google it." Multiple threads in April featured merchants who had already contacted ShipBob and been turned away (100-150 orders/month, 200-320 orders/month, oversized items), each of whom then received a dozen boutique 3PL recommendations in the comments.</p>
+          <p>The trajectory matters: complaint (Oct) to rejection (Nov) to informed churn (Feb) to reflexive dismissal (Apr). Dismissal is harder to reverse than complaint because there is no specific grievance to address.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ TREND 2 ═══════════════ -->
+    <section class="band">
+      <div class="wrap">
+        <div class="section-intro">
+          <p class="eyebrow">Trend 2</p>
+          <h2>The Volume Floor as Competitor Funnel</h2>
+        </div>
+        <div class="prose">
+          <p>ShipBob's 400-order monthly minimum is the single most effective lead-generation mechanism for boutique 3PLs on Reddit.</p>
+          <p>The pattern is consistent from <strong>November 2025</strong> through <strong>April 2026</strong>: a founder posts looking for fulfillment, mentions being too small for ShipBob (or having been rejected outright), and the comment section becomes a matchmaking forum. In November, a small business owner wrote:</p>
+        </div>
+        <div class="pullquote">"ShipBob declined as we are too small."</div>
+        <div class="prose">
+          <p>In April, the same scenario played out multiple times -- a merchant doing 100-150 orders/month reported being told they need 400+, and the thread generated 49 comments, predominantly from smaller 3PLs pitching themselves.</p>
+          <p>A <strong>March 2026</strong> thread from an indie fragrance brand (50-150 orders/month) explicitly stated:</p>
+        </div>
+        <div class="pullquote">"I've already looked at ShipBob and ShipMonk and both are too large for my current stage."</div>
+        <div class="prose">
+          <p>A dedicated 3PL industry commenter responded with a detailed explanation of why ShipBob's model structurally underserves low-volume brands:</p>
+        </div>
+        <div class="pullquote">"ShipBob and ShipMonk aren't bad, you'd just be a rounding error to them."</div>
+        <div class="prose">
+          <p>The competitive consequence is that every rejected merchant becomes a public case study in why ShipBob is not the right fit -- visible in search results, referenced in future threads, and reinforced by a growing ecosystem of boutique competitors who have learned that "ShipBob rejected me" threads are their best organic acquisition channel. Platforms like Third Person (a 3PL matchmaking service) now explicitly position themselves as the answer to ShipBob's minimums.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ TREND 3 ═══════════════ -->
+    <section class="band band--light">
+      <div class="wrap">
+        <div class="section-intro">
+          <p class="eyebrow">Trend 3</p>
+          <h2>China-Direct as Category Disruption</h2>
+        </div>
+        <div class="prose">
+          <p>This is the most structurally significant signal in the dataset and it appeared late -- first in <strong>March 2026</strong>, then accelerating through <strong>April 2026</strong>.</p>
+          <p>The framing is not "ShipBob vs. Competitor X." It is "domestic 3PL model vs. China-direct fulfillment model." ShipBob is being positioned as representative of the traditional approach: ocean freight to US warehouse, 10-12 week capital lockup, storage fees, receiving fees, and hidden costs that inflate the quoted per-order rate by 40-60%.</p>
+          <p>A <strong>March 2026</strong> thread in r/logistics ran the full cost comparison: ShipBob's domestic model versus shipping individual orders by air from a Chinese warehouse. The conclusion -- backed by specific dollar figures -- was that total landed cost favored the China-direct model once storage, freight, receiving, and capital lockup were included. Multiple commenters confirmed the math. By <strong>April 2026</strong>, at least four separate threads across r/logistics, r/EcommerceWebsite, r/EntrepreneurRideAlong, and r/ecommerce repeated this comparison, each time with ShipBob as the domestic benchmark being evaluated against.</p>
+          <p>The structural concern is that this is not a competitor taking share. It is a category shift that makes the entire domestic-warehouse model look expensive for China-sourcing DTC brands. The China-direct model is being framed around cash-flow advantage, not just per-order cost:</p>
+        </div>
+        <div class="pullquote">"inventory sellable within 48 hours of production" vs. "12 weeks of capital locked"</div>
+        <div class="prose">
+          <p>One commenter reported freeing up $90,000 in warehouse stock and redeploying it into ad spend with a 40% revenue increase.</p>
+          <p>ShipBob's exposure here is not about losing to Portless or Nextsmartship specifically. It is about being the named example of the old model every time someone explains the new one.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ TREND 4 ═══════════════ -->
+    <section class="band">
+      <div class="wrap">
+        <div class="section-intro">
+          <p class="eyebrow">Trend 4</p>
+          <h2>Support and Account Management as the Churn Driver</h2>
+        </div>
+        <div class="prose">
+          <p>Across all seven months, the most consistent complaint is not pricing, accuracy, or speed. It is support.</p>
+        </div>
+        <ul class="evidence-list">
+          <li><strong>October 2025:</strong> Merchant who lost $250,000 in overcharges sought a 3PL with "better communication and systems."</li>
+          <li><strong>January 2026:</strong> Seasonal brand said ShipBob "couldn't staff up fast enough, orders sat for a week." A commenter added: "ShipBob isn't asset based so they're 4PL to 3PLs."</li>
+          <li><strong>February 2026:</strong> Merchant praised ShipBob's software and accuracy but left purely over communication: "I'm emailing into a general queue and waiting... problems that sit for 48 hours turn into customer complaints."</li>
+          <li><strong>March 2026:</strong> The most damaging thread: 60+ lost packages valued at $30,000-$36,000, and ShipBob told the merchant "we don't have an account manager we can talk to regarding the issues" and responded with "AI bot replies on generic emails, and no responses from direct contacts." This thread was cross-posted to both r/3PL and r/logistics.</li>
+          <li><strong>April 2026:</strong> Multiple threads referenced ShipBob as the provider where "brands don't get the attention needed early on" and where founders feel like "just another account."</li>
+        </ul>
+        <div class="prose" style="margin-top: 28px;">
+          <p>The February churn thread is the clearest strategic signal: a customer who was operationally satisfied and chose to leave solely because of the support experience. Every other complaint (pricing, accuracy, lost packages) can be dismissed as operational variance. Support-driven churn cannot, because the customer explicitly separated the two.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ TREND 5 ═══════════════ -->
+    <section class="band band--light">
+      <div class="wrap">
+        <div class="section-intro">
+          <p class="eyebrow">Trend 5</p>
+          <h2>The Astroturf Ecosystem</h2>
+        </div>
+        <div class="prose">
+          <p>In <strong>December 2025</strong>, a commenter in r/canadasmallbusiness flagged what appears to be an astroturf campaign by a competitor, linking multiple posts from private accounts that all name-dropped the same boutique 3PL in suspiciously similar narratives. The commenter provided five cross-referenced links and noted:</p>
+        </div>
+        <div class="pullquote">"User accounts are always fully private. They could (and frankly would be smart to) buy Reddit accounts and set them to private and then post stuff like this."</div>
+        <div class="prose">
+          <p>This matters for ShipBob in two ways. First, some of the negative positioning ShipBob receives in comparison threads may be artificially amplified by competitor astroturfing. Second, if ShipBob considers engaging on Reddit (community participation, founder AMAs, or response campaigns), the bar for authenticity is extremely high. The community is already primed to be suspicious, and any perceived astroturfing would damage the brand more than silence.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ WHAT'S WORKING ═══════════════ -->
+    <section class="band band--green">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2>What's Working</h2>
+          <div class="prose">
+            <p>The data is not uniformly negative. Several consistent strengths appear across the full period:</p>
+          </div>
+        </div>
+        <ul class="strengths-list">
+          <li><strong>Software and dashboard quality</strong> is praised even by departing merchants. The February churn thread called the software "solid." The March FBA-prep thread called it "the best software I've seen from any 3PL." The December AI-tools listicle featured ShipBob as a recommended tool. When merchants leave, they typically acknowledge the tech.</li>
+          <li><strong>Distributed fulfillment network</strong> is recognized as a genuine advantage for DTC speed. Multiple threads note that ShipBob ships from the nearest warehouse to the customer and achieves competitive 2-3 day delivery.</li>
+          <li><strong>DTC fulfillment quality</strong> is consistently rated above average. The March FBA-prep thread noted: "If you're primarily DTC with occasional FBA sends, ShipBob would be excellent."</li>
+          <li><strong>Brand recognition</strong> remains dominant. ShipBob appears in virtually every 3PL discussion thread on Reddit, which means it is being evaluated by nearly every merchant entering the category.</li>
+        </ul>
+        <div class="prose" style="margin-top: 28px;">
+          <p>These strengths are real and appear in the data from multiple independent sources. The challenge is that they are being offset by a support perception that converts brand recognition into brand skepticism.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ STRATEGIC RECOMMENDATIONS ═══════════════ -->
+    <section class="band band--shell">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2>Strategic Recommendations</h2>
+        </div>
+        <div class="rec-grid">
+          <div class="rec">
+            <span class="rec__number">1</span>
+            <h3>Address the support perception gap publicly.</h3>
+            <p>The most damaging signal is not from angry customers but from satisfied ones who leave over support. Consider publishing a transparent account-management model: what volume tiers get dedicated contacts, what response-time SLAs exist, and what has changed. The February churn thread would have been prevented by a named account manager.</p>
+          </div>
+          <div class="rec">
+            <span class="rec__number">2</span>
+            <h3>Create a content play for the sub-400-order segment.</h3>
+            <p>Every rejected merchant becomes a public anti-reference. If the minimum cannot be lowered, create a referral pathway to vetted partners rather than a flat rejection. "We recommend X for your current stage, and here is when we become the right fit" converts a negative touchpoint into a future pipeline.</p>
+          </div>
+          <div class="rec">
+            <span class="rec__number">3</span>
+            <h3>Develop a counter-narrative for China-direct positioning.</h3>
+            <p>The China-direct model has real structural advantages for light, China-sourced goods, but it also has real weaknesses (returns handling, delivery speed, tariff risk, heavy/oversized products). ShipBob is currently silent while merchants run one-sided cost comparisons. A data-backed "when domestic fulfillment wins" piece -- acknowledging the hybrid model honestly -- would reframe the conversation.</p>
+          </div>
+          <div class="rec">
+            <span class="rec__number">4</span>
+            <h3>Audit the Reddit carrier-perception problem.</h3>
+            <p>A consumer in r/HiChord described ShipBob as a "dollar store / Kirkland brand shipping carrier" alongside Cirro and GoFo. This is an end-consumer perception thread, not a merchant thread, and it reveals that ShipBob's carrier partnerships are creating brand-perception bleed into the consumer layer. If ShipBob's name appears on carrier tracking, the consumer experience with that carrier reflects on ShipBob.</p>
+          </div>
+          <div class="rec">
+            <span class="rec__number">5</span>
+            <h3>Monitor the astroturf ecosystem before engaging.</h3>
+            <p>Reddit's 3PL space has active astroturfing from at least one competitor. Any ShipBob community engagement must be transparently branded and genuinely helpful. The community already has antibodies for promotional content.</p>
+          </div>
+        </div>
+        <p class="coverage">Coverage: October 2025 -- April 2026 | 44 evidence threads, 22 subreddits, 14 competitors | ogm-pulse -- reddit intelligence</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer">
+      <div class="wrap">
+        <hr class="footer-rule">
+        ogm-pulse &middot; reddit intelligence
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>

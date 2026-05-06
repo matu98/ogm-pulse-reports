@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ogm-pulse | Reddit Intelligence System for ShipBob</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --shell: #2B2824;
+      --paper: #EDE6D4;
+      --paper-soft: #F8F3E6;
+      --paper-deep: #DFD4BA;
+      --green: #59B68E;
+      --green-deep: #2F7A5F;
+      --ink: #191714;
+      --ink-muted: #655F55;
+      --line: rgba(43, 40, 36, 0.18);
+      --white: #FFFDF8;
+      --blue: #5C7894;
+      --yellow: #C7A94E;
+      --red: #B85C4E;
+      --shadow: 0 20px 60px rgba(43, 40, 36, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .band {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .band--shell {
+      background: var(--shell);
+      color: var(--white);
+    }
+
+    .band--light {
+      background: var(--paper-soft);
+    }
+
+    .band--green {
+      background: #DCEBDE;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 72px 0;
+    }
+
+    .hero .wrap {
+      min-height: 92vh;
+      display: grid;
+      align-content: center;
+      padding-bottom: 42px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: Fraunces, Georgia, serif;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 980px;
+      font-size: clamp(4.5rem, 11vw, 9rem);
+      line-height: 0.86;
+    }
+
+    h2 {
+      font-size: clamp(2.2rem, 5vw, 4.4rem);
+      line-height: 0.98;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      line-height: 1.15;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .hero__subtitle {
+      margin-top: 26px;
+      max-width: 760px;
+      color: rgba(255, 253, 248, 0.78);
+      font-size: clamp(1.25rem, 2vw, 1.72rem);
+      font-weight: 400;
+    }
+
+    .hero__line {
+      margin-top: 26px;
+      max-width: 790px;
+      color: rgba(255, 253, 248, 0.62);
+      font-size: 1.05rem;
+    }
+
+    .hero__bottom {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 74px;
+      background: rgba(255, 253, 248, 0.18);
+      border: 1px solid rgba(255, 253, 248, 0.18);
+    }
+
+    .hero__metric {
+      min-height: 112px;
+      padding: 22px;
+      background: rgba(255, 253, 248, 0.06);
+    }
+
+    .hero__metric strong {
+      display: block;
+      color: var(--green);
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    .hero__metric span {
+      display: block;
+      margin-top: 10px;
+      color: rgba(255, 253, 248, 0.74);
+      font-size: 0.92rem;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.55fr);
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 42px;
+    }
+
+    .section-head p {
+      color: var(--ink-muted);
+      font-size: 1rem;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .stage {
+      position: relative;
+      min-height: 260px;
+      padding: 22px;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .stage:last-child {
+      border-right: 0;
+    }
+
+    .stage::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -13px;
+      z-index: 2;
+      width: 26px;
+      height: 26px;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      background: var(--white);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .stage:last-child::after {
+      display: none;
+    }
+
+    .stage__number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--green-deep);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .stage h3 {
+      margin-top: 38px;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .stage p {
+      margin-top: 12px;
+      color: var(--ink-muted);
+      font-size: 0.93rem;
+    }
+
+    .stage__detail {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      left: 22px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 0.84rem;
+      font-weight: 650;
+    }
+
+    .sources {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .source {
+      padding: 34px;
+      background: var(--paper-soft);
+    }
+
+    .source h3 {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .source ul {
+      display: grid;
+      gap: 14px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .source li {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      gap: 12px;
+      color: var(--ink-muted);
+      font-size: 0.96rem;
+    }
+
+    .source li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 0.45em;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .qa {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .qa__item {
+      min-height: 210px;
+      padding: 28px;
+      border: 1px solid rgba(255, 253, 248, 0.18);
+      background: rgba(255, 253, 248, 0.06);
+    }
+
+    .qa__item h3 {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .qa__item p {
+      margin-top: 14px;
+      color: rgba(255, 253, 248, 0.72);
+    }
+
+    .qa__stat {
+      display: block;
+      margin-top: 26px;
+      color: var(--green);
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .insights {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .insight {
+      min-height: 276px;
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .insight h3 {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .insight p {
+      margin-top: 14px;
+      color: var(--ink-muted);
+      font-size: 0.96rem;
+    }
+
+    .insight p:last-child {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .scaling {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(255, 253, 248, 0.18);
+      border: 1px solid rgba(255, 253, 248, 0.18);
+    }
+
+    .scale {
+      min-height: 210px;
+      padding: 30px;
+      background: rgba(255, 253, 248, 0.06);
+    }
+
+    .scale h3 {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .scale p {
+      margin-top: 14px;
+      color: rgba(255, 253, 248, 0.72);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .stat {
+      min-height: 140px;
+      padding: 24px;
+      background: var(--paper-soft);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      line-height: 0.9;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 14px;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .note {
+      margin-top: 22px;
+      color: var(--ink-muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1050px) {
+      .flow,
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stage:nth-child(2n)::after {
+        display: none;
+      }
+
+      .insights,
+      .qa,
+      .scaling {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .wrap {
+        width: min(100% - 28px, 1180px);
+        padding: 48px 0;
+      }
+
+      .hero .wrap {
+        min-height: 88vh;
+      }
+
+      h1 {
+        font-size: clamp(3.4rem, 19vw, 5.2rem);
+      }
+
+      .section-head,
+      .hero__bottom,
+      .sources,
+      .flow,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        min-height: 230px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stage::after {
+        top: auto;
+        right: 50%;
+        bottom: -13px;
+        transform: translateX(50%) rotate(135deg);
+      }
+
+      .stage:nth-child(2n)::after {
+        display: block;
+      }
+
+      .stage:last-child {
+        border-bottom: 0;
+      }
+
+      .stage:last-child::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero band band--shell">
+      <div class="wrap">
+        <p class="eyebrow">Leadership pitch package</p>
+        <h1>ogm-pulse</h1>
+        <p class="hero__subtitle">Reddit Intelligence System for ShipBob</p>
+        <p class="hero__line">Automated collection, classification, and synthesis of Reddit signal that visibility dashboards cannot surface.</p>
+        <div class="hero__bottom" aria-label="System highlights">
+          <div class="hero__metric">
+            <strong>2</strong>
+            <span>independent Reddit data sources</span>
+          </div>
+          <div class="hero__metric">
+            <strong>7</strong>
+            <span>months of ShipBob history</span>
+          </div>
+          <div class="hero__metric">
+            <strong>4</strong>
+            <span>non-obvious insights confirmed</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--light">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Pipeline Flow</h2>
+          <p>Six deterministic stages turn scattered Reddit posts into a structured intelligence export, then a human-edited digest.</p>
+        </div>
+        <div class="flow" aria-label="ogm-pulse pipeline stages">
+          <article class="stage">
+            <span class="stage__number">01</span>
+            <h3>Collection</h3>
+            <p>22 subreddits across ecommerce, seller, fulfillment, logistics, and operations communities.</p>
+            <span class="stage__detail">Reddit API live state + Arctic Shift archive</span>
+          </article>
+          <article class="stage">
+            <span class="stage__number">02</span>
+            <h3>Relevance Gate</h3>
+            <p>Primary-term matching keeps the system focused on ShipBob rather than generic 3PL chatter.</p>
+            <span class="stage__detail">Only ShipBob-mentioning threads enter</span>
+          </article>
+          <article class="stage">
+            <span class="stage__number">03</span>
+            <h3>Quality Check</h3>
+            <p>Archive-only discoveries are checked against live Reddit state before they can enter the export.</p>
+            <span class="stage__detail">Deleted and mod-removed posts excluded</span>
+          </article>
+          <article class="stage">
+            <span class="stage__number">04</span>
+            <h3>Classification</h3>
+            <p>Rule-based labels tag the shape of the discussion without introducing LLM judgment into the pipeline.</p>
+            <span class="stage__detail">7 themes x 2 scope tags</span>
+          </article>
+          <article class="stage">
+            <span class="stage__number">05</span>
+            <h3>Export</h3>
+            <p>Clean JSON carries full thread context, engagement tiers, competitor mentions, and comment samples.</p>
+            <span class="stage__detail">Portable input for Cowork synthesis</span>
+          </article>
+          <article class="stage">
+            <span class="stage__number">06</span>
+            <h3>Synthesis</h3>
+            <p>Matu turns the export into an intelligence digest with editorial judgment and a clear flag system.</p>
+            <span class="stage__detail">Quiet / watch / flag narrative layer</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Data Sources</h2>
+          <p>The system does not trust one discovery path. Live Reddit shows current state; Arctic Shift fills historical and search-index gaps.</p>
+        </div>
+        <div class="sources">
+          <article class="source">
+            <h3>Reddit API</h3>
+            <ul>
+              <li>Live state of current discussions</li>
+              <li>22 monitored subreddits across ecommerce and logistics</li>
+              <li>Per-subreddit search plus global keyword search</li>
+              <li>Rate-limited, read-only collection</li>
+            </ul>
+          </article>
+          <article class="source">
+            <h3>Arctic Shift Archive</h3>
+            <ul>
+              <li>Historical Reddit archive independent of Reddit search</li>
+              <li>Fills gaps where Reddit's own search index misses posts</li>
+              <li>Catches low-engagement threads that ranking suppresses</li>
+              <li>Enables month-by-month historical analysis</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--shell">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Quality Assurance</h2>
+          <p>Three gates keep the pitch honest: relevance, live-state respect, and independent coverage audit.</p>
+        </div>
+        <div class="qa">
+          <article class="qa__item">
+            <h3>Relevance Gate</h3>
+            <p>Competitor-only and ambient 3PL threads are dropped unless ShipBob is actually mentioned in the post.</p>
+            <span class="qa__stat">Primary-term gate locked in D39</span>
+          </article>
+          <article class="qa__item">
+            <h3>Deletion Exclusion</h3>
+            <p>Archive-only posts are verified against live Reddit before inclusion, so author-deleted content is not quoted back into the digest.</p>
+            <span class="qa__stat">Author and mod removals honored</span>
+          </article>
+          <article class="qa__item">
+            <h3>Coverage Audit</h3>
+            <p>April's audit moved from 8 archive misses to 5 residual misses after Arctic Shift became a peer source; the remaining cases are classification or deletion-scope questions.</p>
+            <span class="qa__stat">13 archive hits confirmed in Issue #7</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--green">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What It Surfaces</h2>
+          <p>These are qualitative operator signals: the kind of patterns that never appear in rank tracking or AI visibility dashboards.</p>
+        </div>
+        <div class="insights">
+          <article class="insight">
+            <h3>Evaluate and dismiss</h3>
+            <p>Merchants use ShipBob as the obvious reference point, then ask Reddit for the better-fit alternative.</p>
+            <p>The conversation does not end on ShipBob's branded terms, so visibility data sees awareness while missing positioning erosion.</p>
+          </article>
+          <article class="insight">
+            <h3>Volume-minimum referral pipeline</h3>
+            <p>Threads about order-volume minimums repeatedly redirect smaller merchants toward boutique competitors and regional warehouses.</p>
+            <p>The mechanism is not a keyword ranking problem; it is community matchmaking triggered by an operational threshold.</p>
+          </article>
+          <article class="insight">
+            <h3>China-direct category threat</h3>
+            <p>DTC brands discuss direct-from-China fulfillment as a structural alternative to US-based 3PLs, including ShipBob and ShipMonk.</p>
+            <p>That is not competitor substitution. It is a category bypass that dashboards built around known players will under-read.</p>
+          </article>
+          <article class="insight">
+            <h3>Signals live off-channel</h3>
+            <p>Useful threads appear in Kickstarter, supply chain, 3PL, TikTok Shop, and Canada small-business communities, not just ecommerce forums.</p>
+            <p>The monitoring value is the subreddit map as much as the keyword list; both decide what leadership gets to see.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--shell">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What Scaling Looks Like</h2>
+          <p>The current build is local, but the shape already maps cleanly to hosted operations and other clients.</p>
+        </div>
+        <div class="scaling">
+          <article class="scale">
+            <h3>Other Clients</h3>
+            <p>Same pipeline, new config file. Subreddits, keywords, competitors, and classification tuning swap per client.</p>
+          </article>
+          <article class="scale">
+            <h3>Automation</h3>
+            <p>Collection and classification are already automated. Synthesis can move from manual Cowork to API-driven digest generation when the prompt is proven.</p>
+          </article>
+          <article class="scale">
+            <h3>Client Deliverable</h3>
+            <p>A monthly Reddit intelligence report can sit beside AEO reporting as a different signal type: qualitative, narrative, and community-sourced.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <div class="stats" aria-label="Coverage stats">
+          <div class="stat">
+            <strong>22</strong>
+            <span>Subreddits monitored</span>
+          </div>
+          <div class="stat">
+            <strong>20</strong>
+            <span>Competitors tracked</span>
+          </div>
+          <div class="stat">
+            <strong>7</strong>
+            <span>Months of history</span>
+          </div>
+          <div class="stat">
+            <strong data-total-threads>68</strong>
+            <span>Total threads analyzed</span>
+          </div>
+          <div class="stat">
+            <strong>4</strong>
+            <span>Non-obvious insights</span>
+          </div>
+        </div>
+        <p class="note">History window: October 2025 through April 2026. Total threads analyzed uses raw collection volume from the 7 monthly exports; 44 were surfaced as classified evidence.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

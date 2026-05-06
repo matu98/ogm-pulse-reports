@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShipBob Reddit Pulse — March 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --shell:        #2B2824;
+    --paper:        #EDE6D4;
+    --paper-tint:   #E4DCC5;
+    --paper-warm:   #E8DFC9;
+    --mist:         #D8E0D5;
+    --ink:          #1A1714;
+    --ink-true:     #000000;
+    --ink-80:       rgba(26, 23, 20, 0.84);
+    --ink-60:       rgba(26, 23, 20, 0.62);
+    --ink-40:       rgba(26, 23, 20, 0.42);
+    --ink-15:       rgba(26, 23, 20, 0.16);
+    --ink-08:       rgba(26, 23, 20, 0.09);
+
+    --green:        #59B68E;
+    --green-deep:   #2F6B52;
+    --green-08:     rgba(89, 182, 142, 0.1);
+    --green-15:     rgba(89, 182, 142, 0.2);
+
+    --sand:         #9E7A3E;
+    --sand-soft:    #D9C69A;
+    --amber:        #B8691C;
+    --amber-soft:   rgba(184, 105, 28, 0.12);
+    --clay:         #A52C22;
+    --clay-soft:    rgba(165, 44, 34, 0.12);
+
+    --desk-bg:      #1E2420;
+    --desk-ink:     #F2EDDF;
+    --desk-ink-70:  rgba(242, 237, 223, 0.76);
+    --desk-rule:    rgba(242, 237, 223, 0.2);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--shell);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Document shell */
+  .document {
+    max-width: 1240px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.05),
+      0 40px 80px rgba(0,0,0,0.35),
+      0 0 0 1px rgba(0,0,0,0.15);
+  }
+
+  /* Hero / cover spread — flag-state drives the backdrop */
+  .spread--hero {
+    min-height: 60vh;
+    padding: 96px 72px 64px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .spread--hero .masthead { margin-bottom: 0; padding-bottom: 22px; border-bottom: 1px solid currentColor; opacity: 1; }
+  .spread--hero .masthead { border-bottom-color: rgba(255,255,255,0.18); }
+
+  /* Cover block — lifted H1 + coverage line, rendered inside the hero spread */
+  .spread--hero .cover {
+    margin-top: 56px;
+    max-width: 900px;
+  }
+  .spread--hero .cover h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(42px, 6vw, 70px);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    color: var(--desk-ink);
+    margin: 0 0 18px;
+  }
+  .spread--hero .cover .cover-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--sand-soft);
+    margin: 0;
+  }
+  .spread--hero .cover .cover-meta em { font-style: normal; }
+
+  .spread--flag-red {
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(184, 52, 42, 0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(47, 107, 82, 0.20), transparent 60%),
+      #1A1512;
+    color: var(--desk-ink);
+  }
+  .spread--flag-yellow {
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(184, 105, 28, 0.16), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(47, 107, 82, 0.18), transparent 60%),
+      #1F1A12;
+    color: var(--desk-ink);
+  }
+  .spread--flag-green {
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(89, 182, 142, 0.16), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(47, 107, 82, 0.18), transparent 60%),
+      #132019;
+    color: var(--desk-ink);
+  }
+
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--ink-15);
+  }
+  .masthead__kicker {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--sand-soft);
+  }
+  .masthead__title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500; font-size: 19px;
+    letter-spacing: -0.01em; margin-top: 6px;
+    color: var(--desk-ink);
+  }
+  .masthead__meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--desk-ink-70);
+  }
+
+  /* Markdown body — where the rendered digest content lives */
+  .markdown-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 72px 72px 40px;
+  }
+  .markdown-body > *:first-child { margin-top: 0; }
+
+  .markdown-body h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(42px, 6vw, 70px);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    color: var(--desk-ink);
+    margin: 0 0 14px;
+  }
+  .spread--hero .markdown-body h1 { color: var(--desk-ink); }
+
+  /* The coverage-date italic line right beneath the H1 */
+  .markdown-body h1 + p {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--sand-soft);
+    margin-bottom: 40px;
+  }
+  .markdown-body h1 + p em { font-style: normal; }
+
+  .markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--ink-15);
+    margin: 48px 0;
+  }
+
+  .markdown-body h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(30px, 4.2vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 64px 0 20px;
+  }
+
+  /* The flag H2 (🔴/🟡/🟢) gets a stamp treatment instead of a section head */
+  .markdown-body h2.flag-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 26px;
+    margin: 28px 0 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    border: 1.5px solid currentColor;
+  }
+  .markdown-body h2.flag-heading.flag-red   { color: #E26B5E; background: rgba(226, 107, 94, 0.12); }
+  .markdown-body h2.flag-heading.flag-yellow{ color: #E2A15A; background: rgba(226, 161, 90, 0.12); }
+  .markdown-body h2.flag-heading.flag-green { color: var(--green); background: var(--green-08); }
+
+  /* The paragraph immediately following the flag heading is the flag context */
+  .markdown-body h2.flag-heading + p {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-variation-settings: "opsz" 72;
+    font-size: clamp(19px, 2.1vw, 24px);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+    color: var(--ink-60);
+    max-width: 820px;
+    margin-bottom: 0;
+  }
+
+  .markdown-body h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(22px, 2.8vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 36px 0 14px;
+  }
+
+  .markdown-body p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-80);
+    margin: 0 0 16px;
+    max-width: 820px;
+  }
+  .markdown-body p em { font-style: italic; color: var(--green-deep); }
+  .markdown-body p strong { font-weight: 600; color: var(--ink); }
+
+  .markdown-body blockquote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-variation-settings: "opsz" 48, "SOFT" 50;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink);
+    padding: 6px 0 6px 22px;
+    border-left: 3px solid var(--green);
+    margin: 24px 0;
+    max-width: 820px;
+  }
+  .markdown-body blockquote p { font-size: inherit; color: inherit; margin: 0; font-style: italic; }
+  .markdown-body blockquote em { font-style: italic; color: inherit; }
+
+  /* At-a-glance: python-markdown emits a plain <table> from the pipe-table syntax */
+  .markdown-body table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 820px;
+    margin: 20px 0 36px;
+    background: var(--paper-tint);
+    border-top: 2px solid var(--clay);
+  }
+  .markdown-body .flag-heading.flag-yellow ~ table { border-top-color: var(--amber); }
+  .markdown-body .flag-heading.flag-green ~ table  { border-top-color: var(--green); }
+  .markdown-body th, .markdown-body td {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--ink-08);
+    text-align: left;
+    font-size: 14px;
+    vertical-align: top;
+  }
+  .markdown-body th { display: none; }  /* the mock uses a 2-col borderless layout */
+  .markdown-body td:first-child {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sand);
+    width: 40%;
+    padding-top: 16px;
+  }
+  .markdown-body td {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  .markdown-body ul, .markdown-body ol {
+    margin: 12px 0 28px 20px;
+    max-width: 820px;
+  }
+  .markdown-body li {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-80);
+    margin-bottom: 10px;
+  }
+  .markdown-body li strong { font-weight: 600; color: var(--ink); }
+
+  .markdown-body a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--green);
+    padding-bottom: 2px;
+    transition: color 0.15s ease;
+  }
+  .markdown-body a:hover { color: var(--green-deep); }
+
+  /* The Editor's Desk section — styled when its H2 carries .desk-heading */
+  .markdown-body h2.desk-heading {
+    margin-top: 96px;
+    padding-top: 48px;
+    border-top: 1px solid var(--ink-15);
+    color: var(--ink);
+  }
+
+  /* Colophon */
+  .colophon {
+    padding: 44px 72px 72px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--sand);
+    text-align: center;
+    background: var(--paper);
+    border-top: 1px solid var(--ink-08);
+  }
+  .colophon .sep { color: var(--ink-40); margin: 0 10px; }
+
+  @media (max-width: 840px) {
+    .spread--hero { padding: 56px 32px 40px; }
+    .markdown-body { padding: 48px 32px 24px; }
+    .masthead { flex-direction: column; gap: 16px; }
+    .colophon { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="document">
+
+  <section class="spread spread--hero spread--flag-red">
+    <div class="masthead">
+      <div>
+        <div class="masthead__kicker">ShipBob Reddit Pulse</div>
+        <div class="masthead__title">Qualitative signal from public subreddits</div>
+      </div>
+      <div class="masthead__meta">March 2026 · Mar 1 – Mar 31, 2026</div>
+    </div>
+    <div class="cover"><h1>ShipBob Reddit Pulse — March 2026</h1>
+<p class="cover-meta"><em>Coverage: Mar 1 – Mar 31, 2026</em></p></div>
+  </section>
+
+  <article class="markdown-body">
+    <hr />
+<h2 class="flag-heading flag-red">🔴 FLAG</h2>
+<p>A company reports 60+ lost orders at $500-600 each with no account manager access and AI bot responses replacing support — compounded by three independent threads surfacing the same hidden-fee complaint.</p>
+<hr />
+<h2>At-a-Glance</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conversations tracked</strong></td>
+<td>13</td>
+</tr>
+<tr>
+<td><strong>Coverage period</strong></td>
+<td>Mar 1 – Mar 31, 2026</td>
+</tr>
+<tr>
+<td><strong>Competitor mentions</strong></td>
+<td>ShipMonk (4), ShipHype (1), Portless (1)</td>
+</tr>
+<tr>
+<td><strong>Overall tone</strong></td>
+<td>Strongly negative — operational failures, pricing complaints, and a consumer-side brand perception issue</td>
+</tr>
+</tbody>
+</table>
+<p>March is the highest-volume month in our tracking window by a wide margin. The signal is concentrated: support failures, hidden fees, and a growing conversation about whether domestic 3PLs — ShipBob included — are structurally overpriced compared to China-direct alternatives.</p>
+<hr />
+<h2>Lead Story</h2>
+<h3>60+ lost orders, no account manager, AI bots answering the phone</h3>
+<p>A company in r/3PL (24 comments, score 7) reports that 60+ orders valued at $500-600 each all went missing. That's $30,000-36,000 in lost product. The operational failure is severe, but the escalation failure is worse: ShipBob told the company they don't have an account manager to speak with, direct contacts have gone silent, and the support queue is returning automated responses.</p>
+<blockquote>
+<p><em>"ShipBob has told us that we don't have an account manager we can talk to regarding the issues, and all attempts to email and talk to specific contacts have been ignored."</em></p>
+</blockquote>
+<p>The thread also mentions "continued AI bot replies on generic emails" — a detail that landed hard in the comments. The post was cross-posted to r/logistics with similar engagement.</p>
+<p><strong>What to consider:</strong> This thread connects directly to February's churn narrative. That merchant left because support at their volume meant emailing a general queue. This merchant can't even reach the general queue — they're hitting AI bots. If these two stories represent a pattern (support degradation across volume tiers), it's a systemic issue. If they're isolated, the optics are still damaging: a five-figure loss with no human escalation path is the kind of story that gets cited for months. ShipBob's team should have a clear answer ready for "what happens when things go wrong at scale" — because Reddit is building one on their behalf.</p>
+<p><a href="https://reddit.com/r/3PL/">→ r/3PL thread</a></p>
+<hr />
+<h2>Brand Perception</h2>
+<h3>Hidden fees are the dominant complaint — three independent threads, same accusation</h3>
+<p>The single strongest signal this month isn't one thread — it's three independent conversations all naming the same problem: the gap between ShipBob's quoted price and the actual invoice.</p>
+<p>In r/supplychain (27 comments, score 14), an ops manager at a $15M brand states that ShipBob locks customers into contracts with termination penalties, and reports seeing 30-40% gaps between quoted and actual costs. A commenter in the same thread puts a number on it:</p>
+<blockquote>
+<p><em>"We were quoted $3.20 per order and the first real invoice came in at $4.85 with all the extras. Almost 50% more than the sales call number."</em></p>
+</blockquote>
+<p>In r/ecommerces (29 comments, score 7), a merchant evaluating 3PLs at scale describes ShipBob's pricing as "genuinely confusing once you add storage and receiving and all the random fees." Another commenter in the same thread reports being hit with early termination fees after four months. A third adds a note of resignation: "We bounced from shipbob to shipmonk and tbh it was the same issues just different packaging."</p>
+<p>In r/logistics (24 comments, score 10), a merchant comparing domestic vs. China-direct fulfillment says the domestic quotes "looked better in the spreadsheet until I added storage, receiving, and all the hidden fees."</p>
+<p><strong>What to consider:</strong> Three independent threads naming hidden fees — with specific dollar amounts and percentage gaps — crosses the threshold from anecdote to pattern. This is the kind of community consensus that self-reinforces: future threads asking "is ShipBob worth it?" will find these posts. ShipBob's team should consider whether pricing transparency (published all-in calculators, no-surprise guarantees, or simplified fee structures) could neutralize this narrative before it becomes the default community position.</p>
+<h3>Contract lock-in and termination penalties are compounding the pricing frustration</h3>
+<p>Two threads explicitly name contract terms as a second-order problem. The r/supplychain thread references "contracts with termination penalties," and the r/ecommerces thread includes a commenter who was hit with early termination fees after four months. When merchants feel they were underquoted and then discover they can't leave without penalty, the frustration compounds — and those are the stories that get retold.</p>
+<h3>ShipBob's dashboard continues to earn praise, even from critics</h3>
+<p>For the second consecutive month, a merchant leaving ShipBob praised the dashboard. An FBA seller in r/AmazonFBA (3 comments, score 2) called it "the best software I've seen from any 3pl" — the same phrase used by the February churn merchant — before noting that FBA prep "felt like an afterthought compared to their DTC side." The consistency of this compliment across departing merchants is notable: ShipBob's product is good enough that people say so on their way out the door.</p>
+<p><a href="https://reddit.com/r/AmazonFBA/">→ r/AmazonFBA thread</a></p>
+<h3>Consumer-side brand perception: "dollar store shipping carrier"</h3>
+<p>A thread in r/HiChord (10 comments, score 3) surfaces a different kind of signal — how end consumers perceive ShipBob as a carrier. A buyer who paid $20 for shipping received a package via ShipBob/Cirro/GoFo carriers and described the experience as a "'dollar store' / 'kirkland brand' shipping carrier... riddled with terrible online reviews." This is a consumer-facing brand perception problem, not a merchant-facing one. When the delivery experience itself undermines the brand the merchant is trying to build, that's a conversation ShipBob's B2B positioning doesn't reach.</p>
+<p><a href="https://reddit.com/r/HiChord/">→ r/HiChord thread</a></p>
+<h3>ShipBob acknowledged as wrong fit for oversized items</h3>
+<p>A merchant in r/ShopifyeCommerce (9 comments, score 2) looking for fulfillment for 350-lb items says they tried ShipBob with "no luck." A fulfillment provider in the comments explains: ShipBob is "built for fast-moving small parcels, not heavy freight." This isn't a complaint — it's a capability boundary being correctly identified by the community. No action needed, but it confirms where ShipBob's reputation sits in the product-fit conversation.</p>
+<p><a href="https://reddit.com/r/ShopifyeCommerce/">→ r/ShopifyeCommerce thread</a></p>
+<hr />
+<h2>Competitive Landscape</h2>
+<h3>ShipMonk: same problems, different name</h3>
+<p>ShipMonk appears in four threads this month, but not as a winner. In the r/ecommerces evaluation thread, one commenter frames it bluntly: "We bounced from shipbob to shipmonk and tbh it was the same issues just different packaging." In the January peak-season thread (still echoing), ShipMonk told a merchant to stop sending inventory in June. ShipMonk isn't winning ShipBob's defectors — it's absorbing them and disappointing them the same way. This is cold comfort for ShipBob but useful intelligence: the competitive threat isn't ShipMonk doing better; it's merchants concluding that all large 3PLs are the same.</p>
+<h3>China-direct fulfillment: the structural alternative gaining real traction</h3>
+<p>Two threads this month explore China-based fulfillment as a direct alternative to domestic 3PLs. The r/logistics thread (24 comments, score 10) includes a merchant who got quotes from ShipBob, a local 3PL, and Portless (a China-direct provider). The finding: domestic quotes were competitive on paper until storage, receiving, and hidden fees were added. A separate thread in r/Business_China runs a similar cost comparison.</p>
+<blockquote>
+<p><em>"got quotes from a few places... shipbob and a local 3pl for domestic, then portless for China-based model. The domestic quotes looked better in the spreadsheet until I added storage, receiving, and all the hidden fees."</em></p>
+</blockquote>
+<p><strong>What to consider:</strong> China-direct fulfillment isn't a competitor in the traditional sense — it's a category challenge. If merchants with China-sourced products can skip the import-warehouse-ship cycle entirely, the value proposition of domestic 3PLs narrows to speed and returns handling. ShipBob's team should be aware that this conversation is growing, and that ShipBob's hidden fees are being used as the argument for going direct.</p>
+<p><a href="https://reddit.com/r/logistics/">→ r/logistics thread</a></p>
+<hr />
+<h2>Key Takeaway</h2>
+<p>March is a flag month. The 60+ lost orders thread is alarming on its own, but it's the hidden-fee pattern that carries the most strategic weight — three independent threads, specific dollar figures, and a community consensus forming around the gap between ShipBob's quoted and actual pricing. Combined with February's support-model churn and the growing China-direct alternative conversation, the picture this month is clear: ShipBob's operational quality and dashboard are respected, but its pricing transparency and support accessibility are building a compounding reputation problem. ShipBob's team should prioritize two things: a credible answer to the hidden-fee narrative (whether that's pricing simplification, published all-in calculators, or proactive invoice transparency), and a visible human escalation path for merchants whose orders go missing at scale. The community is writing ShipBob's reputation in real time — the question is whether ShipBob gets ahead of it or responds to it.</p>
+<hr />
+<p><em>ogm-pulse · reddit intelligence</em>
+<em>Coverage: Mar 1 – Mar 31, 2026</em></p>
+  </article>
+
+  <div class="colophon">
+    ogm-pulse <span class="sep">·</span> ShipBob Reddit Pulse — March 2026 <span class="sep">·</span> Prepared for Matu <span class="sep">·</span> Private <span class="sep">·</span> Non-redistributed
+  </div>
+
+</div>
+
+</body>
+</html>
